@@ -35,7 +35,7 @@ class Post(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.text[:100]
+        return self.text[:15]
 
     class Meta:
         ordering = ['-pub_date']
