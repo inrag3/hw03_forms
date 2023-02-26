@@ -68,12 +68,11 @@ def post_edit(request, post_id):
     form = PostForm(request.POST or None, instance=post)
     if request.user != post.author:
         return redirect("posts:post_detail", post_id)
-    if request.user == post.author:
-        if request.method == 'POST' and form.is_valid():
-            post.text = form.cleaned_data['text']
-            post.group = form.cleaned_data['group']
-            post.save()
-            return redirect('posts:post_detail', post.id)
+    if request.method == 'POST' and form.is_valid():
+        post.text = form.cleaned_data['text']
+        post.group = form.cleaned_data['group']
+        post.save()
+        return redirect('posts:post_detail', post.id)
     context = {
         'form': form,
         'is_edit': is_edit,

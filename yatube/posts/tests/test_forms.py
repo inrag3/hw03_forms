@@ -17,9 +17,8 @@ class PostFormTests(TestCase):
         )
 
     def setUp(self):
-        self.guest_client = Client()
         self.authorized_client = Client()
-        self.authorized_client.force_login(PostFormTests.user)
+        self.authorized_client.force_login(self.user)
 
     def test_posts_post_create_successfully(self):
         posts_count = Post.objects.count()
@@ -39,8 +38,11 @@ class PostFormTests(TestCase):
         }
         posts_count = Post.objects.count()
         self.authorized_client.post(
-            reverse('posts:post_edit', kwargs={'post_id': 1}),
+            reverse('posts:post_edit', kwargs={
+                    'post_id': PostFormTests.post.id}),
             data=form_data,
             follow=True
         )
         self.assertEqual(Post.objects.count(), posts_count)
+        self.assertEqual(str(Post.objects.get(id=PostFormTests.post.id)),
+                         form_data['text'][:15])
